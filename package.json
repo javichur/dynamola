@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
-    "docs:build": "documentation build index.js -f html --shallow -o docs"
+    "docs:build": "documentation build index.js -f html --shallow -o docs",
+    "docs:build-md": "documentation build index.js -f md --shallow > docs/index.md"
   },
   "repository": {
     "type": "git",
