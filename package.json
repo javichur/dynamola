@@ -1,0 +1,39 @@
+{
+  "name": "dynamola",
+  "version": "1.0.0",
+  "description": "DynamoDB easy library for Lambda functions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "docs:build": "documentation build index.js -f html --shallow -o docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/javichur/dynamola.git"
+  },
+  "keywords": [
+    "dynamodb",
+    "easy",
+    "lambda",
+    "node",
+    "javascript",
+    "api",
+    "sdk",
+    "fast"
+  ],
+  "author": "Javier Campos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/javichur/dynamola/issues"
+  },
+  "homepage": "https://github.com/javichur/dynamola#readme",
+  "dependencies": {
+    "aws-sdk": "^2.463.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0"
+  }
+}
