@@ -1,5 +1,7 @@
 # dynamola
 
+ [![NPM Version](https://img.shields.io/npm/v/dynamola.svg?style=flat)](https://npmjs.org/package/dynamola)
+
 DynamoDB easy library for Lambda functions.
 
 ## Ejemplo de uso
@@ -21,3 +23,7 @@ myDb.getItem(userID).then((data) => {
     // error al acceder a dynamodb
 });
 ```
+
+## Proyecto de ejemplo que usa Dynamola
+
+https://github.com/javichur/Alexa-Skill-Lavaplatos

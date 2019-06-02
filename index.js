@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.0.0
+ * @version 1.0.1
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} primaryKeyName nombre de la clave principal de la tabla.
