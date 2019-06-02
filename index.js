@@ -211,11 +211,11 @@ class Dynamola {
     return ret;
   }
 
-  static customConsoleLog(msg, data) {
+  customConsoleLog(msg, data) {
     console.log(`${msg} ${JSON.stringify(data, null, 2)}`);
   }
 
-  static customConsoleError(msg, err) {
+  customConsoleError(msg, err) {
     console.error(`${msg} ${JSON.stringify(err, null, 2)}`);
   }
 }
