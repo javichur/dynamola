@@ -24,6 +24,8 @@ myDb.getItem(userID).then((data) => {
 });
 ```
 
-## Proyecto de ejemplo que usa Dynamola
+## Proyectos de ejemplo que usa Dynamola para leer y escribir en DynamoDB de AWS
 
 https://github.com/javichur/Alexa-Skill-Lavaplatos
+
+https://github.com/javichur/alexa-skill-nevera-estado/
