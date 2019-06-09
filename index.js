@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.0.1
+ * @version 1.0.3
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} primaryKeyName nombre de la clave principal de la tabla.
@@ -91,7 +91,7 @@ class Dynamola {
       this.docClient.put(params, (err, data) => {
         if (err) {
           this.customConsoleError('Unable to insert:', err);
-          return reject(JSON.stringify(err, null, 2));
+          return reject(err);
         }
         this.customConsoleLog('Saved Data:', data);
         return resolve(data);
@@ -209,6 +209,50 @@ class Dynamola {
     }
 
     return ret;
+  }
+
+  /**
+   * Crea una tabla dynamodb básica, con:
+   * - una clave de partición con nombre "Key" y tipo string.
+   * - sin clave de ordenación.
+   * - con capacidad aprovisionada de 5 lecturas y 5 escrituras.
+   * - sin índices secundarios.
+   * 
+   * @param {string} tableName nombre de la tabla
+   */
+  static createTableBasic(tableName) {
+    return new Promise((resolve, reject) => {
+      var params = {
+        AttributeDefinitions: [
+          {
+            AttributeName: "Key",
+            AttributeType: "S"
+          }
+        ],
+        KeySchema: [
+          {
+            AttributeName: "Key",
+            KeyType: "HASH"
+          }
+        ],
+        ProvisionedThroughput: {
+          ReadCapacityUnits: 5,
+          WriteCapacityUnits: 5
+        },
+        TableName: tableName
+      };
+
+      var dynamodb = new AWS.DynamoDB();
+      dynamodb.createTable(params, function (err, data) {
+        if (err) {
+          // console.log('Error creating table: ' + err, err.stack); //error
+          return reject(err);
+        } else {
+          // console.log('Table created: ' + JSON.stringify(data)); // OK response
+          return resolve(data);
+        }
+      });
+    });
   }
 
   customConsoleLog(msg, data) {
