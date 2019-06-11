@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>dynamola 1.0.0 | Documentation</title>
+  <title>dynamola 1.0.3 | Documentation</title>
   <meta name='description' content='DynamoDB easy library for Lambda functions.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>dynamola</h3>
-          <div class='mb1'><code>1.0.0</code></div>
+          <div class='mb1'><code>1.0.3</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -33,6 +33,17 @@
                 </a>
                 
                 <div class='toggle-target display-none'>
+                  
+                  <ul class='list-reset py1-ul pl1'>
+                    <li class='h5'><span>Static members</span></li>
+                    
+                      <li><a
+                        href='#dynamolacreatetablebasic'
+                        class='regular pre-open'>
+                        .createTableBasic
+                      </a></li>
+                    
+                    </ul>
                   
                   
                     <ul class='list-reset py1-ul pl1'>
@@ -131,7 +142,7 @@
   
 
   
-  <div>Version: 1.0.0</div>
+  <div>Version: 1.0.3</div>
   <div>License: MIT</div>
   <div>Author: Javier Campos (https://javiercampos.es).</div>
   
@@ -152,8 +163,8 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    nombre de la clave principal de la tabla.
+            <span class='code bold'>partitionKeyName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    nombre de la Clave de Partición de la tabla.
 
           </div>
           
@@ -161,8 +172,67 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
-	    nombre de la clave de ordenación de la tabla (opcional).
+            <span class='code bold'>sortKeyName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    nombre de la Clave de Ordenación de la tabla (opcional).
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Static Members</div>
+    <div class="clearfix">
+  
+    <div class='border-bottom' id='dynamolacreatetablebasic'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>createTableBasic(tableName)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Crea una tabla dynamodb básica, con:</p>
+<ul>
+<li>una clave de partición con nombre "Key" y tipo string.</li>
+<li>sin clave de ordenación.</li>
+<li>con capacidad aprovisionada de 5 lecturas y 5 escrituras.</li>
+<li>sin índices secundarios.</li>
+</ul>
+
+    <div class='pre p1 fill-light mt0'>createTableBasic(tableName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>tableName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    nombre de la tabla
 
           </div>
           
@@ -182,6 +252,20 @@
   
 
   
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+</div>
+
+  
+
+  
     <div class='py1 quiet mt1 prose-big'>Instance Members</div>
     <div class="clearfix">
   
@@ -189,7 +273,7 @@
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>constructor(tableName, primaryKeyName, primarySortKeyName)</span>
+            <span class='code strong strong truncate'>constructor(tableName, partitionKeyName, sortKeyName)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -198,7 +282,7 @@
   
 
   
-    <div class='pre p1 fill-light mt0'>constructor(tableName: any, primaryKeyName: any, primarySortKeyName: any)</div>
+    <div class='pre p1 fill-light mt0'>constructor(tableName: any, partitionKeyName: any, sortKeyName: any)</div>
   
   
 
@@ -223,7 +307,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyName</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>partitionKeyName</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -231,7 +315,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyName</span> <code class='quiet'>(any)</code>
+            <span class='code bold'>sortKeyName</span> <code class='quiet'>(any)</code>
 	    
           </div>
           
@@ -250,11 +334,11 @@
     <div class='py1 quiet mt1 prose-big'>Example</div>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// constructor, para una tabla con clave principal y clave de ordenación:</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// constructor, para tabla con Clave Principal Compuesta (Clave Partición y Clave Ordenación)</span>
 <span class="hljs-keyword">let</span> myDb = <span class="hljs-keyword">new</span> Dynamola(<span class="hljs-string">"nombreMiTablaMensajes"</span>, <span class="hljs-string">"userId"</span>, <span class="hljs-string">"fechaHora"</span>);</pre>
     
       
-      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// constructor, para una tabla con solo clave principal:</span>
+      <pre class='p1 overflow-auto round fill-light'><span class="hljs-comment">// constructor, para tabla con Clave Principal Simple (solo Clave Partición):</span>
 <span class="hljs-keyword">let</span> myDb = <span class="hljs-keyword">new</span> Dynamola(<span class="hljs-string">"nombreMiTablaUsuarios"</span>, <span class="hljs-string">"userId"</span>, <span class="hljs-literal">null</span>);</pre>
     
   
@@ -275,7 +359,7 @@
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue)</span>
+            <span class='code strong strong truncate'>getItemWithPrimarySortKey(partitionKeyValue, sortKeyValue)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -286,7 +370,7 @@
   <p>Obtiene un elemento en una tabla con clave principal compuesta (clave partición +
 clave ordenación).</p>
 
-    <div class='pre p1 fill-light mt0'>getItemWithPrimarySortKey(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, primarySortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>getItemWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -303,7 +387,7 @@ clave ordenación).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición.
 
           </div>
@@ -312,7 +396,7 @@ clave ordenación).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>sortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de ordenación.
 
           </div>
@@ -354,7 +438,7 @@ clave ordenación).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getItem(primaryKeyValue)</span>
+            <span class='code strong strong truncate'>getItem(partitionKeyValue)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -362,9 +446,9 @@ clave ordenación).</p>
 
   
 
-  <p>Obtiene un elemento en una tabla que no tenga clave de ordenación.</p>
+  <p>Obtiene un elemento en una tabla con Clave Partición (Clave Principal Simple)</p>
 
-    <div class='pre p1 fill-light mt0'>getItem(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>getItem(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -381,7 +465,7 @@ clave ordenación).</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición.
 
           </div>
@@ -423,7 +507,7 @@ clave ordenación).</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue, itemAttributes)</span>
+            <span class='code strong strong truncate'>addItemWithPrimarySortKey(partitionKeyValue, sortKeyValue, itemAttributes)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -434,7 +518,7 @@ clave ordenación).</p>
   <p>Añade un elemento a la tabla, con una clave de partición + clave de ordenación y
 un conjunto de atributos.</p>
 
-    <div class='pre p1 fill-light mt0'>addItemWithPrimarySortKey(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, primarySortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>addItemWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -451,7 +535,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a insertar.
 
           </div>
@@ -460,7 +544,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>sortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de ordenación del elemento a insertar.
 
           </div>
@@ -511,7 +595,7 @@ un conjunto de atributos.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>addItem(primaryKeyValue, itemAttributes)</span>
+            <span class='code strong strong truncate'>addItem(partitionKeyValue, itemAttributes)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -521,7 +605,7 @@ un conjunto de atributos.</p>
 
   <p>Añade un elemento a la tabla, con una clave de partición y un conjunto de atributos.</p>
 
-    <div class='pre p1 fill-light mt0'>addItem(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>addItem(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributes: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -538,7 +622,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a insertar.
 
           </div>
@@ -589,7 +673,7 @@ un conjunto de atributos.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>deleteItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue)</span>
+            <span class='code strong strong truncate'>deleteItemWithPrimarySortKey(partitionKeyValue, sortKeyValue)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -599,7 +683,7 @@ un conjunto de atributos.</p>
 
   <p>Elimina un elemento a la tabla, con una clave de partición y clave de ordenación.</p>
 
-    <div class='pre p1 fill-light mt0'>deleteItemWithPrimarySortKey(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, primarySortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>deleteItemWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -616,7 +700,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a eliminar.
 
           </div>
@@ -625,7 +709,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>sortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de ordenación del elemento a eliminar.
 
           </div>
@@ -667,7 +751,7 @@ un conjunto de atributos.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>deleteItem(primaryKeyValue)</span>
+            <span class='code strong strong truncate'>deleteItem(partitionKeyValue)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -677,7 +761,7 @@ un conjunto de atributos.</p>
 
   <p>Elimina un elemento a la tabla, con una clave de partición.</p>
 
-    <div class='pre p1 fill-light mt0'>deleteItem(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>deleteItem(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -694,7 +778,7 @@ un conjunto de atributos.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a eliminar.
 
           </div>
@@ -736,7 +820,7 @@ un conjunto de atributos.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>updateItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue, itemAttributesToChange)</span>
+            <span class='code strong strong truncate'>updateItemWithPrimarySortKey(partitionKeyValue, sortKeyValue, itemAttributesToChange)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -747,7 +831,7 @@ un conjunto de atributos.</p>
   <p>Actualiza un elemento a la tabla, con una clave de partición + clave de ordenación, y
 listado de atributos-valores que se actualizarán.</p>
 
-    <div class='pre p1 fill-light mt0'>updateItemWithPrimarySortKey(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, primarySortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributesToChange: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>updateItemWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributesToChange: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -764,7 +848,7 @@ listado de atributos-valores que se actualizarán.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a actualizar.
 
           </div>
@@ -773,7 +857,7 @@ listado de atributos-valores que se actualizarán.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primarySortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>sortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de ordenación del elemento a actualizar.
 
           </div>
@@ -824,7 +908,7 @@ listado de atributos-valores que se actualizarán.</p>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>updateItem(primaryKeyValue, itemAttributesToChange)</span>
+            <span class='code strong strong truncate'>updateItem(partitionKeyValue, itemAttributesToChange)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -835,7 +919,7 @@ listado de atributos-valores que se actualizarán.</p>
   <p>Actualiza un elemento a la tabla, con una clave de partición, y
 listado de atributos-valores que se actualizarán.</p>
 
-    <div class='pre p1 fill-light mt0'>updateItem(primaryKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributesToChange: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+    <div class='pre p1 fill-light mt0'>updateItem(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributesToChange: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -852,7 +936,7 @@ listado de atributos-valores que se actualizarán.</p>
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>primaryKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición del elemento a actualizar.
 
           </div>

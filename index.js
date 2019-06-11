@@ -6,24 +6,24 @@
  * @version 1.0.3
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
- * @param {string} primaryKeyName nombre de la clave principal de la tabla.
- * @param {string} primarySortKeyName nombre de la clave de ordenación de la tabla (opcional).
+ * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
+ * @param {string} sortKeyName nombre de la Clave de Ordenación de la tabla (opcional).
  */
 const AWS = require('aws-sdk');
 
 class Dynamola {
   /**
    * @example
-   * // constructor, para una tabla con clave principal y clave de ordenación:
+   * // constructor, para tabla con Clave Principal Compuesta (Clave Partición y Clave Ordenación)
    * let myDb = new Dynamola("nombreMiTablaMensajes", "userId", "fechaHora");
    * @example
-   * // constructor, para una tabla con solo clave principal:
+   * // constructor, para tabla con Clave Principal Simple (solo Clave Partición):
    * let myDb = new Dynamola("nombreMiTablaUsuarios", "userId", null);
    */
-  constructor(tableName, primaryKeyName, primarySortKeyName) {
+  constructor(tableName, partitionKeyName, sortKeyName) {
     this.tableName = tableName;
-    this.primaryKeyName = primaryKeyName;
-    this.primarySortKeyName = primarySortKeyName;
+    this.partitionKeyName = partitionKeyName;
+    this.sortKeyName = sortKeyName;
 
     this.docClient = new AWS.DynamoDB.DocumentClient();
     // https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GettingStarted.NodeJs.03.htmlclear
@@ -33,17 +33,17 @@ class Dynamola {
   /**
    * Obtiene un elemento en una tabla con clave principal compuesta (clave partición +
    * clave ordenación).
-   * @param {string} primaryKeyValue valor de la clave de partición.
-   * @param {string} primarySortKeyValue valor de la clave de ordenación.
+   * @param {string} partitionKeyValue valor de la clave de partición.
+   * @param {string} sortKeyValue valor de la clave de ordenación.
    * @returns {Promise<Object>} promise con el elemento.
    */
-  getItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue) {
+  getItemWithPrimarySortKey(partitionKeyValue, sortKeyValue) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
       };
 
-      params.Key = this.createKey(primaryKeyValue, primarySortKeyValue);
+      params.Key = this.createKey(partitionKeyValue, sortKeyValue);
 
       this.docClient.get(params, (err, data) => {
         if (err) {
@@ -57,30 +57,30 @@ class Dynamola {
   }
 
   /**
-   * Obtiene un elemento en una tabla que no tenga clave de ordenación.
-   * @param {string} primaryKeyValue valor de la clave de partición.
+   * Obtiene un elemento en una tabla con Clave Partición (Clave Principal Simple)
+   * @param {string} partitionKeyValue valor de la clave de partición.
    * @returns {Promise<Object>} promise con el elemento.
    */
-  getItem(primaryKeyValue) {
-    return this.getItemWithPrimarySortKey(primaryKeyValue, null);
+  getItem(partitionKeyValue) {
+    return this.getItemWithPrimarySortKey(partitionKeyValue, null);
   }
 
   /**
    * Añade un elemento a la tabla, con una clave de partición + clave de ordenación y
    * un conjunto de atributos.
    *
-   * @param {string} primaryKeyValue valor de la clave de partición del elemento a insertar.
-   * @param {string} primarySortKeyValue valor de la clave de ordenación del elemento a insertar.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a insertar.
+   * @param {string} sortKeyValue valor de la clave de ordenación del elemento a insertar.
    * @param {Object} itemAttributes conjunto de atributos del elemento a insertar.
    * @returns {Promise<Object>} promise de la inserción.
    */
-  addItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue, itemAttributes) {
+  addItemWithPrimarySortKey(partitionKeyValue, sortKeyValue, itemAttributes) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
       };
 
-      params.Item = this.createKey(primaryKeyValue, primarySortKeyValue);
+      params.Item = this.createKey(partitionKeyValue, sortKeyValue);
 
       // Add properties
       for (let i = 0; i < Object.keys(itemAttributes).length; i += 1) {
@@ -102,29 +102,29 @@ class Dynamola {
   /**
  * Añade un elemento a la tabla, con una clave de partición y un conjunto de atributos.
  *
- * @param {string} primaryKeyValue valor de la clave de partición del elemento a insertar.
+ * @param {string} partitionKeyValue valor de la clave de partición del elemento a insertar.
  * @param {Object} itemAttributes conjunto de atributos del elemento a insertar.
  * @returns {Promise<Object>} promise de la inserción.
  */
-  addItem(primaryKeyValue, itemAttributes) {
-    return this.addItemWithPrimarySortKey(primaryKeyValue, null, itemAttributes);
+  addItem(partitionKeyValue, itemAttributes) {
+    return this.addItemWithPrimarySortKey(partitionKeyValue, null, itemAttributes);
   }
 
 
   /**
    * Elimina un elemento a la tabla, con una clave de partición y clave de ordenación.
    *
-   * @param {string} primaryKeyValue valor de la clave de partición del elemento a eliminar.
-   * @param {string} primarySortKeyValue valor de la clave de ordenación del elemento a eliminar.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a eliminar.
+   * @param {string} sortKeyValue valor de la clave de ordenación del elemento a eliminar.
    * @returns {Promise<Object>} promise de la eliminación.
    */
-  deleteItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue) {
+  deleteItemWithPrimarySortKey(partitionKeyValue, sortKeyValue) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
       };
 
-      params.Key = this.createKey(primaryKeyValue, primarySortKeyValue);
+      params.Key = this.createKey(partitionKeyValue, sortKeyValue);
 
       this.docClient.delete(params, (err, data) => {
         if (err) {
@@ -140,11 +140,11 @@ class Dynamola {
   /**
    * Elimina un elemento a la tabla, con una clave de partición.
    *
-   * @param {string} primaryKeyValue valor de la clave de partición del elemento a eliminar.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a eliminar.
    * @returns {Promise<Object>} promise de la eliminación.
    */
-  deleteItem(primaryKeyValue) {
-    return this.deleteItemWithPrimarySortKey(primaryKeyValue, null);
+  deleteItem(partitionKeyValue) {
+    return this.deleteItemWithPrimarySortKey(partitionKeyValue, null);
   }
 
 
@@ -152,18 +152,18 @@ class Dynamola {
    * Actualiza un elemento a la tabla, con una clave de partición + clave de ordenación, y
    * listado de atributos-valores que se actualizarán.
    *
-   * @param {string} primaryKeyValue valor de la clave de partición del elemento a actualizar.
-   * @param {string} primarySortKeyValue valor de la clave de ordenación del elemento a actualizar.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a actualizar.
+   * @param {string} sortKeyValue valor de la clave de ordenación del elemento a actualizar.
    * @param {Object} itemAttributesToChange listado de atributos-valores que se actualizarán.
    * @returns {Promise<Object>} promise de la actualización.
    */
-  updateItemWithPrimarySortKey(primaryKeyValue, primarySortKeyValue, itemAttributesToChange) {
+  updateItemWithPrimarySortKey(partitionKeyValue, sortKeyValue, itemAttributesToChange) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
       };
 
-      params.Key = this.createKey(primaryKeyValue, primarySortKeyValue);
+      params.Key = this.createKey(partitionKeyValue, sortKeyValue);
 
       let strUpdateExpression = 'set';
       params.ExpressionAttributeValues = {};
@@ -192,20 +192,20 @@ class Dynamola {
    * Actualiza un elemento a la tabla, con una clave de partición, y
    * listado de atributos-valores que se actualizarán.
    *
-   * @param {string} primaryKeyValue valor de la clave de partición del elemento a actualizar.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a actualizar.
    * @param {Object} itemAttributesToChange listado de atributos-valores que se actualizarán.
    * @returns {Promise<Object>} promise de la actualización.
    */
-  updateItem(primaryKeyValue, itemAttributesToChange) {
-    return this.updateItemWithPrimarySortKey(primaryKeyValue, null, itemAttributesToChange);
+  updateItem(partitionKeyValue, itemAttributesToChange) {
+    return this.updateItemWithPrimarySortKey(partitionKeyValue, null, itemAttributesToChange);
   }
 
 
-  createKey(primaryKeyValue, primarySortKeyValue) {
+  createKey(partitionKeyValue, sortKeyValue) {
     const ret = {};
-    ret[this.primaryKeyName] = primaryKeyValue; // add key
-    if (primarySortKeyValue) {
-      ret[this.primarySortKeyName] = primarySortKeyValue; // add sort key (optional)
+    ret[this.partitionKeyName] = partitionKeyValue; // add key
+    if (sortKeyValue) {
+      ret[this.sortKeyName] = sortKeyValue; // add sort key (optional)
     }
 
     return ret;
@@ -217,40 +217,36 @@ class Dynamola {
    * - sin clave de ordenación.
    * - con capacidad aprovisionada de 5 lecturas y 5 escrituras.
    * - sin índices secundarios.
-   * 
    * @param {string} tableName nombre de la tabla
    */
   static createTableBasic(tableName) {
     return new Promise((resolve, reject) => {
-      var params = {
+      const params = {
         AttributeDefinitions: [
           {
-            AttributeName: "Key",
-            AttributeType: "S"
-          }
+            AttributeName: 'Key',
+            AttributeType: 'S',
+          },
         ],
         KeySchema: [
           {
-            AttributeName: "Key",
-            KeyType: "HASH"
-          }
+            AttributeName: 'Key',
+            KeyType: 'HASH',
+          },
         ],
         ProvisionedThroughput: {
           ReadCapacityUnits: 5,
-          WriteCapacityUnits: 5
+          WriteCapacityUnits: 5,
         },
-        TableName: tableName
+        TableName: tableName,
       };
 
-      var dynamodb = new AWS.DynamoDB();
-      dynamodb.createTable(params, function (err, data) {
+      const dynamodb = new AWS.DynamoDB();
+      dynamodb.createTable(params, (err, data) => {
         if (err) {
-          // console.log('Error creating table: ' + err, err.stack); //error
           return reject(err);
-        } else {
-          // console.log('Table created: ' + JSON.stringify(data)); // OK response
-          return resolve(data);
         }
+        return resolve(data);
       });
     });
   }
