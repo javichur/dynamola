@@ -57,7 +57,7 @@ b. Si quieres acceder a la tabla DynamoDB desde fuera de Amazon Web Services, pu
 
 1. Clave de Partición (Partition Key).
 2. Clave de Ordenación (Sort Key).
-3. Clave Principal Simple (Simple Primary Key). Formada solo por Clave de Partición).
+3. Clave Principal Simple (Simple Primary Key). Formada solo por Clave de Partición.
 4. Clave Principal Compuesta (Composite Primary Key). Formada por una Clave de Partición y una Clave de Ordenación.
 
 ## Proyectos de ejemplo que usa Dynamola para leer y escribir en DynamoDB de AWS
