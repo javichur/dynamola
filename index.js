@@ -207,6 +207,54 @@ class Dynamola {
   }
 
 
+  /**
+   * Incrementando de forma atómica el valor de un atributo en X cantidad.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a actualizar.
+   * @param {string} sortKeyValue valor de la clave de ordenación del elemento a actualizar.
+   * @param {string} attributeName nombre del atributo a incrementar.
+   * @param {int} increment cantidad en la que se incrementa el valor.
+   * @returns {Promise<Object>} promise de la actualización.
+   */
+  incrementCounterWithPrimarySortKey(partitionKeyValue, sortKeyValue, attributeName, increment) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        ReturnValues: 'UPDATED_NEW',
+        UpdateExpression: `set ${attributeName} = ${attributeName} + :inc`,
+        ExpressionAttributeValues: {
+          ":inc": increment
+        }
+      };
+
+      params.Key = this.createKey(partitionKeyValue, sortKeyValue);
+
+      this.docClient.update(params, (err, data) => {
+        if (err) {
+          this.customConsoleError('Unable to update item. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        this.customConsoleLog('UpdateItem succeeded:', data);
+        return resolve(data.Attributes);
+      });
+    });
+  }
+
+
+  /**
+   * Incrementando de forma atómica el valor de un atributo en X unidades.
+   * @param {string} partitionKeyValue valor de la clave de partición del elemento a actualizar.
+   * @param {string} attributeName nombre del atributo a incrementar.
+   * @param {int} increment cantidad en la que se incrementa el valor.
+   * @returns {Promise<Object>} promise de la actualización.
+   */
+  incrementCounter(partitionKeyValue, attributeName, increment) {
+    return this.incrementCounterWithPrimarySortKey(partitionKeyValue,
+                                                   null,
+                                                   attributeName,
+                                                   increment);
+  }
+
+
   createKey(partitionKeyValue, sortKeyValue) {
     const ret = {};
     ret[this.partitionKeyName] = partitionKeyValue; // add key

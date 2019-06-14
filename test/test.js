@@ -65,6 +65,14 @@ describe('Dynamola tests', function () {
     assert.equal(okOrKo.otroAtributo, nuevoValor);
   });
 
+  it('Incrementar contador atómico', async () => {
+    const incremento = 10;
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await d.incrementCounter(ITEMPRUEBAS.Key, 'atributoNum', incremento);
+    
+    assert.equal(okOrKo.atributoNum, ITEMPRUEBAS.atributoNum + incremento);
+  });
+
 
   /* El método update de DynamoDB no soporta espacios en los nombres de los atributos.
   it('Actualizar item de la tabla, atributo CON espacios', async () => {
@@ -81,7 +89,6 @@ describe('Dynamola tests', function () {
     const okOrKo = await d.deleteItem(ITEMPRUEBAS.Key);
 
     assert.equal(okOrKo.Key, ITEMPRUEBAS.Key);
-    assert.equal(okOrKo.atributoNum, ITEMPRUEBAS.atributoNum);
   });
   
 

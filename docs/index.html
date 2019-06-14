@@ -103,6 +103,18 @@
                         #updateItem
                       </a></li>
                       
+                      <li><a
+                        href='#dynamolaincrementcounterwithprimarysortkey'
+                        class='regular pre-open'>
+                        #incrementCounterWithPrimarySortKey
+                      </a></li>
+                      
+                      <li><a
+                        href='#dynamolaincrementcounter'
+                        class='regular pre-open'>
+                        #incrementCounter
+                      </a></li>
+                      
                     </ul>
                   
                   
@@ -569,7 +581,7 @@ un conjunto de atributos.</p>
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
-        promise de la inserción.
+        promise de la inserción. revolve(Item) o reject(err)
 
       
     
@@ -830,6 +842,7 @@ un conjunto de atributos.</p>
 
   <p>Actualiza un elemento a la tabla, con una clave de partición + clave de ordenación, y
 listado de atributos-valores que se actualizarán.</p>
+<p>No funciona con espacios en los nombres de los atributos.</p>
 
     <div class='pre p1 fill-light mt0'>updateItemWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, itemAttributesToChange: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
@@ -947,6 +960,189 @@ listado de atributos-valores que se actualizarán.</p>
           <div>
             <span class='code bold'>itemAttributesToChange</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    listado de atributos-valores que se actualizarán.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        promise de la actualización.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='dynamolaincrementcounterwithprimarysortkey'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>incrementCounterWithPrimarySortKey(partitionKeyValue, sortKeyValue, attributeName, increment)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Incrementando de forma atómica el valor de un atributo en X cantidad.</p>
+
+    <div class='pre p1 fill-light mt0'>incrementCounterWithPrimarySortKey(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, attributeName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, increment: int): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    valor de la clave de partición del elemento a actualizar.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sortKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    valor de la clave de ordenación del elemento a actualizar.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>attributeName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    nombre del atributo a incrementar.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>increment</span> <code class='quiet'>(int)</code>
+	    cantidad en la que se incrementa el valor.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        promise de la actualización.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='dynamolaincrementcounter'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>incrementCounter(partitionKeyValue, attributeName, increment)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Incrementando de forma atómica el valor de un atributo en X unidades.</p>
+
+    <div class='pre p1 fill-light mt0'>incrementCounter(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, attributeName: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, increment: int): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    valor de la clave de partición del elemento a actualizar.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>attributeName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    nombre del atributo a incrementar.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>increment</span> <code class='quiet'>(int)</code>
+	    cantidad en la que se incrementa el valor.
 
           </div>
           
