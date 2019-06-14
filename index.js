@@ -72,7 +72,7 @@ class Dynamola {
    * @param {string} partitionKeyValue valor de la clave de partición del elemento a insertar.
    * @param {string} sortKeyValue valor de la clave de ordenación del elemento a insertar.
    * @param {Object} itemAttributes conjunto de atributos del elemento a insertar.
-   * @returns {Promise<Object>} promise de la inserción.
+   * @returns {Promise<Object>} promise de la inserción. revolve(Item) o reject(err)
    */
   addItemWithPrimarySortKey(partitionKeyValue, sortKeyValue, itemAttributes) {
     return new Promise((resolve, reject) => {
@@ -93,8 +93,10 @@ class Dynamola {
           this.customConsoleError('Unable to insert:', err);
           return reject(err);
         }
-        this.customConsoleLog('Saved Data:', data);
-        return resolve(data);
+        // The ReturnValues parameter is used by several DynamoDB operations; 
+        // however, PutItem (and put) does not recognize any values other than NONE or ALL_OLD.
+        this.customConsoleLog('Saved Data. ', data);
+        return resolve(params.Item); // devuelve input
       });
     });
   }
@@ -122,6 +124,7 @@ class Dynamola {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
+        ReturnValues: 'ALL_OLD',
       };
 
       params.Key = this.createKey(partitionKeyValue, sortKeyValue);
@@ -132,7 +135,7 @@ class Dynamola {
           return reject(JSON.stringify(err, null, 2));
         }
         this.customConsoleLog('DeleteItem succeeded:', data);
-        return resolve();
+        return resolve(data.Attributes);
       });
     });
   }
@@ -151,6 +154,8 @@ class Dynamola {
   /**
    * Actualiza un elemento a la tabla, con una clave de partición + clave de ordenación, y
    * listado de atributos-valores que se actualizarán.
+   * 
+   * No funciona con espacios en los nombres de los atributos.
    *
    * @param {string} partitionKeyValue valor de la clave de partición del elemento a actualizar.
    * @param {string} sortKeyValue valor de la clave de ordenación del elemento a actualizar.
@@ -161,6 +166,7 @@ class Dynamola {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
+        ReturnValues: 'UPDATED_NEW'
       };
 
       params.Key = this.createKey(partitionKeyValue, sortKeyValue);
@@ -169,13 +175,13 @@ class Dynamola {
       params.ExpressionAttributeValues = {};
       for (let i = 0; i < Object.keys(itemAttributesToChange).length; i += 1) {
         const name = Object.keys(itemAttributesToChange)[i];
+        //const nameNorm = `${name.replace(/\s/g, '_')}_value`; // no es suficiente
 
         strUpdateExpression += ` ${name} = :${name}_value`;
         params.ExpressionAttributeValues[`:${name}_value`] = itemAttributesToChange[name];
       }
 
       params.UpdateExpression = strUpdateExpression;
-      params.ReturnValues = 'UPDATED_NEW';
 
       this.docClient.update(params, (err, data) => {
         if (err) {
@@ -183,7 +189,7 @@ class Dynamola {
           return reject(JSON.stringify(err, null, 2));
         }
         this.customConsoleLog('UpdateItem succeeded:', data);
-        return resolve();
+        return resolve(data.Attributes);
       });
     });
   }

@@ -1,7 +1,21 @@
+/**
+ * Tests
+ * 
+ * links of interest:
+ * - How to Test Promises with Mocha:
+ *   https://wietse.loves.engineering/testing-promises-with-mocha-90df8b7d2e35 
+ */
 const assert = require('assert');
 const dynamola = require('../index');
 
-const nombreTablaPruebas = 'tablaprueba';
+const NOMBRETABLAPRUEBAS = 'tablaprueba';
+const ITEMPRUEBAS = {
+  Key: 'item4',
+  otroAtributo: 'valor otro atributo',
+  'atr con espacios': 'valor atributo',
+  atributoNum: 25
+}
+
 const sharedCredentialsProfile = 'dynamodb-profile';
 const awsRegion = 'eu-west-1';
 
@@ -12,47 +26,77 @@ AWS.config.credentials = credentials;
 
 AWS.config.update({ region: awsRegion });
 
-const dynamodb = new AWS.DynamoDB();
-
 describe('Dynamola tests', function () {
   
-  it('Creación tabla ' + nombreTablaPruebas, async () => {
+  /*
+  it('Creación tabla ' + NOMBRETABLAPRUEBAS, async () => {
+    const result = await dynamola.createTableBasic(NOMBRETABLAPRUEBAS);
+    assert.equal(result.TableDescription.TableName, NOMBRETABLAPRUEBAS);
+  });
+  */
+ 
+  it('Añadiendo item en la tabla', async () => {
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await
+      d.addItem(ITEMPRUEBAS.Key, { 'otroAtributo': ITEMPRUEBAS.otroAtributo,
+                                   'atr con espacios': ITEMPRUEBAS['atr con espacios'],
+                                  atributoNum: ITEMPRUEBAS.atributoNum });
 
-    const result = await dynamola.createTableBasic(nombreTablaPruebas);
+    console.log("add result: " + JSON.stringify(okOrKo));
+    assert.equal(okOrKo.Key, ITEMPRUEBAS.Key);
+  });
 
-    assert.equal(result.TableDescription.TableName, nombreTablaPruebas);
+
+  it('Obtener item de la tabla', async () => {
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await d.getItem(ITEMPRUEBAS.Key);
+  
+    assert.equal(okOrKo.Key, ITEMPRUEBAS.Key);
+    assert.equal(okOrKo['otroAtributo'], ITEMPRUEBAS.otroAtributo);
+    assert.equal(okOrKo['atr con espacios'], ITEMPRUEBAS['atr con espacios']);
+  });
+
+
+  it('Actualizar item de la tabla, atributo SIN espacios', async () => {
+    const nuevoValor = 'valor actualizado';
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await d.updateItem(ITEMPRUEBAS.Key, { otroAtributo: nuevoValor});
+    
+    assert.equal(okOrKo.otroAtributo, nuevoValor);
+  });
+
+
+  /* El método update de DynamoDB no soporta espacios en los nombres de los atributos.
+  it('Actualizar item de la tabla, atributo CON espacios', async () => {
+    const nuevoValor = 'valor actualizado espacio';
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await d.updateItem(ITEMPRUEBAS.Key, { 'atr con espacios': nuevoValor});
+    
+    assert.equal(okOrKo['atr con espacios'], nuevoValor);
+  });
+  */
+  
+  it('Borrar item de la tabla', async () => {
+    let d = new dynamola(NOMBRETABLAPRUEBAS, 'Key', null);
+    const okOrKo = await d.deleteItem(ITEMPRUEBAS.Key);
+
+    assert.equal(okOrKo.Key, ITEMPRUEBAS.Key);
+    assert.equal(okOrKo.atributoNum, ITEMPRUEBAS.atributoNum);
   });
   
-  it('Añadiendo item en la tabla', () => {
 
-    let d = new dynamola(nombreTablaPruebas, 'Key', null);
-    return d.addItem('item4', { 'otro atributo': 'valor 4' }).then((result) => {
-      console.log("add result: " + JSON.stringify(result));
-      assert.equal(result, 'added!'); // force error
-    });
-  });
-
-  it('Obtener item de la tabla', () => {
-
-    let d = new dynamola(nombreTablaPruebas, 'Key', null);
-    return d.getItem('item4').then((result) => {
-      console.log("get result: " + JSON.stringify(result));
-      assert.equal(result.Key, 'item4');
-      assert.equal(result['otro atributo'], 'valor 4');
-    });
-  });
-
-  
-  it('Borrar la tabla', async () => {    
-    dynamodb.deleteTable({ TableName: nombreTablaPruebas }, function (err, data) {
+  /*
+  it('Borrar la tabla', async () => {
+    const dynamodb = new AWS.DynamoDB();
+    dynamodb.deleteTable({ TableName: NOMBRETABLAPRUEBAS }, function (err, data) {
       if (err) {
-        console.error(`Unable to delete table "${nombreTablaPruebas}". Error JSON:`, JSON.stringify(err, null, 2));
+        console.error(`Unable to delete table "${NOMBRETABLAPRUEBAS}". Error JSON:`, JSON.stringify(err, null, 2));
       } else {
-        console.log(`Deleted table "${nombreTablaPruebas}". Table description JSON:`, JSON.stringify(data, null, 2));
+        console.log(`Deleted table "${NOMBRETABLAPRUEBAS}". Table description JSON:`, JSON.stringify(data, null, 2));
       }
 
-      assert.equal(data.TableDescription.TableName, nombreTablaPruebas);
+      assert.equal(data.TableDescription.TableName, NOMBRETABLAPRUEBAS);
     });
   });
-  
+  */
 })
