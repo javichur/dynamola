@@ -1,0 +1,11 @@
+{
+    "local": {
+      "region": "ocal",
+      "endpoint": "http://localhost:8000",
+      "profile": "fake-downloadable-version"
+    },
+    "remote": {
+      "region": "eu-west-1",
+      "profile": "dynamodb-profile"
+    }
+}

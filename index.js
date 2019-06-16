@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.0.3
+ * @version 1.3.0
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
@@ -90,7 +90,7 @@ class Dynamola {
           this.customConsoleError('Unable to read items. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('GetItems succeeded:', data);
+        this.customConsoleLog('getAllItems... succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -103,8 +103,9 @@ class Dynamola {
    * @param {string} partitionKeyValue valor de la clave de partición.
    * @param {string} rangeFrom inicio rango de la clave de ordenación.
    * @param {string} rangeTo fin rango de la clave de ordenación.
+   * @returns {Promise<Object>} promise con array de elementos.
    */
-  getItemsByPartitionKeyInRange(partitionKeyValue, rangeFrom, rangeTo) {
+  getItemsBySortKeyInRange(partitionKeyValue, sortKeyRangeFrom, sortKeyRangeTo) {
     return new Promise((resolve, reject) => {
       const params = {
         TableName: this.tableName,
@@ -115,8 +116,8 @@ class Dynamola {
         },
         ExpressionAttributeValues: {
           ':val': partitionKeyValue,
-          ':from': rangeFrom,
-          ':to': rangeTo,
+          ':from': sortKeyRangeFrom,
+          ':to': sortKeyRangeTo,
         },
       };
 
@@ -125,7 +126,38 @@ class Dynamola {
           this.customConsoleError('Unable to read items. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('GetItems in range succeeded:', data);
+        this.customConsoleLog('getItemsBySortKeyInRange() succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
+
+  /**
+   * Devuelve todos los items cuyo valor de partition key está entre los 2 valores dados.
+   * @param {string} partitionKeyFrom Inicio del rango de la clave de partición.
+   * @param {string} partitionKeyTo Fin del rango de la clave de partición.
+   * @returns {Promise<Object>} promise con array de elementos.
+   */
+  getItemsByPartitionKeyInRange(partitionKeyFrom, partitionKeyTo) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        FilterExpression: '#partitionKey between :from and :to',
+        ExpressionAttributeNames: {
+          '#partitionKey': this.partitionKeyName,
+        },
+        ExpressionAttributeValues: {
+          ':from': partitionKeyFrom,
+          ':to': partitionKeyTo,
+        },
+      };
+
+      this.docClient.scan(params, (err, data) => {
+        if (err) {
+          this.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        this.customConsoleLog('getItemsByPartitionKeyInRange() succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -179,6 +211,59 @@ class Dynamola {
     return this.addItemWithPrimarySortKey(partitionKeyValue, null, itemAttributes);
   }
 
+
+  /**
+   * Añade un elemento en la tabla a partir de un objeto, que debe tener al menos 1 atributo
+   * llamado como la Clave de Partición y, si hay clave de ordenación, otro atributo llamado
+   * como la clave de ordenación. Además, puede tener otros atributos que también se
+   * almacenarán en la tabla con sus nombres.
+   *
+   * @param {object} item item que se guardará en la tabla.
+   * @returns {Promise<Object>} promise de la inserción.
+   */
+  addItemFromObject(item) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+      };
+
+      // comprobar que contiene valor para Clave Partición (obligado) y Clave Ordenación (opcional)
+      let partitionKeyFound = false;
+      let sortKeyFound = false;
+      for (let i = 0; i < Object.keys(item).length; i += 1) {
+        const name = Object.keys(item)[i];
+        if (name === this.partitionKeyName) {
+          partitionKeyFound = true;
+        } else if (this.sortKeyName != null && name === this.sortKeyName) {
+          sortKeyFound = true;
+        }
+      }
+
+      if (partitionKeyFound === false) {
+        const err = `El objeto no tiene atributo llamado como la Clave Partición "${this.partitionKeyName}"`;
+        this.customConsoleError('Unable to insert:', err);
+        return reject(err);
+      }
+      if (this.sortKeyName !== null && sortKeyFound === false) {
+        const err = `El objeto no tiene atributo llamado como la Clave Ordenación "${this.sortKeyName}".`;
+        this.customConsoleError('Unable to insert:', err);
+        return reject(err);
+      }
+
+      params.Item = item;
+
+      this.docClient.put(params, (err, data) => {
+        if (err) {
+          this.customConsoleError('Unable to insert:', err);
+          return reject(err);
+        }
+        // The ReturnValues parameter is used by several DynamoDB operations;
+        // however, PutItem (and put) does not recognize any values other than NONE or ALL_OLD.
+        this.customConsoleLog('Saved Data. ', data);
+        return resolve(params.Item); // devuelve input
+      });
+    });
+  }
 
   /**
    * Elimina un elemento a la tabla, con una clave de partición y clave de ordenación.

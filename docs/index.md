@@ -13,39 +13,43 @@
         -   [Parameters][9]
     -   [getAllItemsByPartitionKey][10]
         -   [Parameters][11]
-    -   [getItemsByPartitionKeyInRange][12]
+    -   [getItemsBySortKeyInRange][12]
         -   [Parameters][13]
-    -   [addItemWithPrimarySortKey][14]
+    -   [getItemsByPartitionKeyInRange][14]
         -   [Parameters][15]
-    -   [addItem][16]
+    -   [addItemWithPrimarySortKey][16]
         -   [Parameters][17]
-    -   [deleteItemWithPrimarySortKey][18]
+    -   [addItem][18]
         -   [Parameters][19]
-    -   [deleteItem][20]
+    -   [addItemFromObject][20]
         -   [Parameters][21]
-    -   [updateItemWithPrimarySortKey][22]
+    -   [deleteItemWithPrimarySortKey][22]
         -   [Parameters][23]
-    -   [updateItem][24]
+    -   [deleteItem][24]
         -   [Parameters][25]
-    -   [incrementCounterWithPrimarySortKey][26]
+    -   [updateItemWithPrimarySortKey][26]
         -   [Parameters][27]
-    -   [incrementCounter][28]
+    -   [updateItem][28]
         -   [Parameters][29]
-    -   [createTableBasic][30]
+    -   [incrementCounterWithPrimarySortKey][30]
         -   [Parameters][31]
-    -   [createTableBasicWithSortKey][32]
+    -   [incrementCounter][32]
         -   [Parameters][33]
+    -   [createTableBasic][34]
+        -   [Parameters][35]
+    -   [createTableBasicWithSortKey][36]
+        -   [Parameters][37]
 
 ## Dynamola
 
 Dynamola, the DynamoDB easy library for Lambda functions.
-([https://github.com/javichur/dynamola][34])
+([https://github.com/javichur/dynamola][38])
 
 ### Parameters
 
--   `tableName` **[string][35]** nombre de la tabla en DynamoDB.
--   `partitionKeyName` **[string][35]** nombre de la Clave de Partición de la tabla.
--   `sortKeyName` **[string][35]** nombre de la Clave de Ordenación de la tabla (opcional).
+-   `tableName` **[string][39]** nombre de la tabla en DynamoDB.
+-   `partitionKeyName` **[string][39]** nombre de la Clave de Partición de la tabla.
+-   `sortKeyName` **[string][39]** nombre de la Clave de Ordenación de la tabla (opcional).
 
 **Meta**
 
@@ -80,10 +84,10 @@ clave ordenación).
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición.
--   `sortKeyValue` **[string][35]** valor de la clave de ordenación.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición.
+-   `sortKeyValue` **[string][39]** valor de la clave de ordenación.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise con el elemento.
+Returns **[Promise][40]&lt;[Object][41]>** promise con el elemento.
 
 ### getItem
 
@@ -91,31 +95,46 @@ Obtiene un elemento en una tabla con Clave Principal Simple (solo Clave Partici�
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise con el elemento.
+Returns **[Promise][40]&lt;[Object][41]>** promise con el elemento.
 
 ### getAllItemsByPartitionKey
 
-En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para 
+En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
 el valor de Clave de Partición dado.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise con array de elementos.
+Returns **[Promise][40]&lt;[Object][41]>** promise con array de elementos.
 
-### getItemsByPartitionKeyInRange
+### getItemsBySortKeyInRange
 
-En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para 
+En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
 el valor de Clave de Partición dado, cuya Clave de Ordenación está en el rango dado.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición.
--   `rangeFrom` **[string][35]** inicio rango de la clave de ordenación.
--   `rangeTo` **[string][35]** fin rango de la clave de ordenación.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición.
+-   `sortKeyRangeFrom`  
+-   `sortKeyRangeTo`  
+-   `rangeFrom` **[string][39]** inicio rango de la clave de ordenación.
+-   `rangeTo` **[string][39]** fin rango de la clave de ordenación.
+
+Returns **[Promise][40]&lt;[Object][41]>** promise con array de elementos.
+
+### getItemsByPartitionKeyInRange
+
+Devuelve todos los items cuyo valor de partition key está entre los 2 valores dados.
+
+#### Parameters
+
+-   `partitionKeyFrom` **[string][39]** Inicio del rango de la clave de partición.
+-   `partitionKeyTo` **[string][39]** Fin del rango de la clave de partición.
+
+Returns **[Promise][40]&lt;[Object][41]>** promise con array de elementos.
 
 ### addItemWithPrimarySortKey
 
@@ -124,11 +143,11 @@ un conjunto de atributos.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a insertar.
--   `sortKeyValue` **[string][35]** valor de la clave de ordenación del elemento a insertar.
--   `itemAttributes` **[Object][37]** conjunto de atributos del elemento a insertar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a insertar.
+-   `sortKeyValue` **[string][39]** valor de la clave de ordenación del elemento a insertar.
+-   `itemAttributes` **[Object][41]** conjunto de atributos del elemento a insertar.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la inserción. revolve(Item) o reject(err)
+Returns **[Promise][40]&lt;[Object][41]>** promise de la inserción. revolve(Item) o reject(err)
 
 ### addItem
 
@@ -136,10 +155,23 @@ Añade un elemento a la tabla, con una clave de partición y un conjunto de atri
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a insertar.
--   `itemAttributes` **[Object][37]** conjunto de atributos del elemento a insertar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a insertar.
+-   `itemAttributes` **[Object][41]** conjunto de atributos del elemento a insertar.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la inserción.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la inserción.
+
+### addItemFromObject
+
+Añade un elemento en la tabla a partir de un objeto, que debe tener al menos 1 atributo
+llamado como la Clave de Partición y, si hay clave de ordenación, otro atributo llamado
+como la clave de ordenación. Además, puede tener otros atributos que también se
+almacenarán en la tabla con sus nombres.
+
+#### Parameters
+
+-   `item` **[object][41]** item que se guardará en la tabla.
+
+Returns **[Promise][40]&lt;[Object][41]>** promise de la inserción.
 
 ### deleteItemWithPrimarySortKey
 
@@ -147,10 +179,10 @@ Elimina un elemento a la tabla, con una clave de partición y clave de ordenaci�
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a eliminar.
--   `sortKeyValue` **[string][35]** valor de la clave de ordenación del elemento a eliminar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a eliminar.
+-   `sortKeyValue` **[string][39]** valor de la clave de ordenación del elemento a eliminar.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la eliminación.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la eliminación.
 
 ### deleteItem
 
@@ -158,9 +190,9 @@ Elimina un elemento a la tabla, con una clave de partición.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a eliminar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a eliminar.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la eliminación.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la eliminación.
 
 ### updateItemWithPrimarySortKey
 
@@ -171,11 +203,11 @@ No funciona con espacios en los nombres de los atributos.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a actualizar.
--   `sortKeyValue` **[string][35]** valor de la clave de ordenación del elemento a actualizar.
--   `itemAttributesToChange` **[Object][37]** listado de atributos-valores que se actualizarán.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a actualizar.
+-   `sortKeyValue` **[string][39]** valor de la clave de ordenación del elemento a actualizar.
+-   `itemAttributesToChange` **[Object][41]** listado de atributos-valores que se actualizarán.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la actualización.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la actualización.
 
 ### updateItem
 
@@ -184,10 +216,10 @@ listado de atributos-valores que se actualizarán.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a actualizar.
--   `itemAttributesToChange` **[Object][37]** listado de atributos-valores que se actualizarán.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a actualizar.
+-   `itemAttributesToChange` **[Object][41]** listado de atributos-valores que se actualizarán.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la actualización.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la actualización.
 
 ### incrementCounterWithPrimarySortKey
 
@@ -195,12 +227,12 @@ Incrementando de forma atómica el valor de un atributo en X cantidad.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a actualizar.
--   `sortKeyValue` **[string][35]** valor de la clave de ordenación del elemento a actualizar.
--   `attributeName` **[string][35]** nombre del atributo a incrementar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a actualizar.
+-   `sortKeyValue` **[string][39]** valor de la clave de ordenación del elemento a actualizar.
+-   `attributeName` **[string][39]** nombre del atributo a incrementar.
 -   `increment` **int** cantidad en la que se incrementa el valor.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la actualización.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la actualización.
 
 ### incrementCounter
 
@@ -208,11 +240,11 @@ Incrementando de forma atómica el valor de un atributo en X unidades.
 
 #### Parameters
 
--   `partitionKeyValue` **[string][35]** valor de la clave de partición del elemento a actualizar.
--   `attributeName` **[string][35]** nombre del atributo a incrementar.
+-   `partitionKeyValue` **[string][39]** valor de la clave de partición del elemento a actualizar.
+-   `attributeName` **[string][39]** nombre del atributo a incrementar.
 -   `increment` **int** cantidad en la que se incrementa el valor.
 
-Returns **[Promise][36]&lt;[Object][37]>** promise de la actualización.
+Returns **[Promise][40]&lt;[Object][41]>** promise de la actualización.
 
 ### createTableBasic
 
@@ -225,7 +257,7 @@ Crea una tabla dynamodb básica, con:
 
 #### Parameters
 
--   `tableName` **[string][35]** nombre de la tabla
+-   `tableName` **[string][39]** nombre de la tabla
 
 ### createTableBasicWithSortKey
 
@@ -238,7 +270,7 @@ Crea una tabla dynamodb básica, con:
 
 #### Parameters
 
--   `tableName` **[string][35]** nombre de la tabla
+-   `tableName` **[string][39]** nombre de la tabla
 
 [1]: #dynamola
 
@@ -262,54 +294,62 @@ Crea una tabla dynamodb básica, con:
 
 [11]: #parameters-4
 
-[12]: #getitemsbypartitionkeyinrange
+[12]: #getitemsbysortkeyinrange
 
 [13]: #parameters-5
 
-[14]: #additemwithprimarysortkey
+[14]: #getitemsbypartitionkeyinrange
 
 [15]: #parameters-6
 
-[16]: #additem
+[16]: #additemwithprimarysortkey
 
 [17]: #parameters-7
 
-[18]: #deleteitemwithprimarysortkey
+[18]: #additem
 
 [19]: #parameters-8
 
-[20]: #deleteitem
+[20]: #additemfromobject
 
 [21]: #parameters-9
 
-[22]: #updateitemwithprimarysortkey
+[22]: #deleteitemwithprimarysortkey
 
 [23]: #parameters-10
 
-[24]: #updateitem
+[24]: #deleteitem
 
 [25]: #parameters-11
 
-[26]: #incrementcounterwithprimarysortkey
+[26]: #updateitemwithprimarysortkey
 
 [27]: #parameters-12
 
-[28]: #incrementcounter
+[28]: #updateitem
 
 [29]: #parameters-13
 
-[30]: #createtablebasic
+[30]: #incrementcounterwithprimarysortkey
 
 [31]: #parameters-14
 
-[32]: #createtablebasicwithsortkey
+[32]: #incrementcounter
 
 [33]: #parameters-15
 
-[34]: https://github.com/javichur/dynamola
+[34]: #createtablebasic
 
-[35]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[35]: #parameters-16
 
-[36]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[36]: #createtablebasicwithsortkey
 
-[37]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[37]: #parameters-17
+
+[38]: https://github.com/javichur/dynamola
+
+[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[40]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise
+
+[41]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

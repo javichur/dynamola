@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>dynamola 1.0.3 | Documentation</title>
+  <title>dynamola 1.2.0 | Documentation</title>
   <meta name='description' content='DynamoDB easy library for Lambda functions.'>
   <meta name='viewport' content='width=device-width,initial-scale=1'>
   <link href='assets/bass.css' rel='stylesheet' />
@@ -15,7 +15,7 @@
       <div id='split-left' class='overflow-auto fs0 height-viewport-100'>
         <div class='py1 px2'>
           <h3 class='mb0 no-anchor'>dynamola</h3>
-          <div class='mb1'><code>1.0.3</code></div>
+          <div class='mb1'><code>1.2.0</code></div>
           <input
             placeholder='Filter'
             id='filter-input'
@@ -80,6 +80,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#dynamolagetitemsbysortkeyinrange'
+                        class='regular pre-open'>
+                        #getItemsBySortKeyInRange
+                      </a></li>
+                      
+                      <li><a
                         href='#dynamolagetitemsbypartitionkeyinrange'
                         class='regular pre-open'>
                         #getItemsByPartitionKeyInRange
@@ -95,6 +101,12 @@
                         href='#dynamolaadditem'
                         class='regular pre-open'>
                         #addItem
+                      </a></li>
+                      
+                      <li><a
+                        href='#dynamolaadditemfromobject'
+                        class='regular pre-open'>
+                        #addItemFromObject
                       </a></li>
                       
                       <li><a
@@ -670,11 +682,11 @@ el valor de Clave de Partición dado.</p>
       </div>
     </div>
   
-    <div class='border-bottom' id='dynamolagetitemsbypartitionkeyinrange'>
+    <div class='border-bottom' id='dynamolagetitemsbysortkeyinrange'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>getItemsByPartitionKeyInRange(partitionKeyValue, rangeFrom, rangeTo)</span>
+            <span class='code strong strong truncate'>getItemsBySortKeyInRange(partitionKeyValue, sortKeyRangeFrom, sortKeyRangeTo, rangeFrom, rangeTo)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -685,7 +697,7 @@ el valor de Clave de Partición dado.</p>
   <p>En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
 el valor de Clave de Partición dado, cuya Clave de Ordenación está en el rango dado.</p>
 
-    <div class='pre p1 fill-light mt0'>getItemsByPartitionKeyInRange(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, rangeFrom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, rangeTo: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</div>
+    <div class='pre p1 fill-light mt0'>getItemsBySortKeyInRange(partitionKeyValue: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, sortKeyRangeFrom: any, sortKeyRangeTo: any, rangeFrom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, rangeTo: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
   
   
 
@@ -705,6 +717,22 @@ el valor de Clave de Partición dado, cuya Clave de Ordenación está en el rang
             <span class='code bold'>partitionKeyValue</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
 	    valor de la clave de partición.
 
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sortKeyRangeFrom</span> <code class='quiet'>(any)</code>
+	    
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sortKeyRangeTo</span> <code class='quiet'>(any)</code>
+	    
           </div>
           
         </div>
@@ -732,6 +760,92 @@ el valor de Clave de Partición dado, cuya Clave de Ordenación está en el rang
 
   
 
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        promise con array de elementos.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='dynamolagetitemsbypartitionkeyinrange'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>getItemsByPartitionKeyInRange(partitionKeyFrom, partitionKeyTo)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Devuelve todos los items cuyo valor de partition key está entre los 2 valores dados.</p>
+
+    <div class='pre p1 fill-light mt0'>getItemsByPartitionKeyInRange(partitionKeyFrom: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>, partitionKeyTo: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>partitionKeyFrom</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    Inicio del rango de la clave de partición.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>partitionKeyTo</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String">string</a>)</code>
+	    Fin del rango de la clave de partición.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        promise con array de elementos.
+
+      
+    
   
 
   
@@ -880,6 +994,78 @@ un conjunto de atributos.</p>
           <div>
             <span class='code bold'>itemAttributes</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)</code>
 	    conjunto de atributos del elemento a insertar.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></code>:
+        promise de la inserción.
+
+      
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='dynamolaadditemfromobject'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>addItemFromObject(item)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Añade un elemento en la tabla a partir de un objeto, que debe tener al menos 1 atributo
+llamado como la Clave de Partición y, si hay clave de ordenación, otro atributo llamado
+como la clave de ordenación. Además, puede tener otros atributos que también se
+almacenarán en la tabla con sus nombres.</p>
+
+    <div class='pre p1 fill-light mt0'>addItemFromObject(item: <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>): <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&#x3C;<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>></div>
+  
+  
+
+  
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>item</span> <code class='quiet'>(<a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object">object</a>)</code>
+	    item que se guardará en la tabla.
 
           </div>
           

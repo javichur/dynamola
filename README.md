@@ -4,6 +4,8 @@
 
 DynamoDB easy library for Lambda functions.
 
+Documentación completa en https://github.com/javichur/dynamola/blob/master/docs/index.md
+
 ## Ejemplo de uso
 
 ```
