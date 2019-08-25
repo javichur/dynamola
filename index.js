@@ -3,13 +3,14 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.3.0
+ * @version 1.4.0
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
  * @param {string} sortKeyName nombre de la Clave de Ordenación de la tabla (opcional).
  */
 const AWS = require('aws-sdk');
+const ParamsBuilder = require('./paramsBuilder.js');
 
 class Dynamola {
   /**
@@ -47,10 +48,10 @@ class Dynamola {
 
       this.docClient.get(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to read item. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to read item. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('GetItem succeeded:', data);
+        Dynamola.customConsoleLog('GetItem succeeded:', data);
         return resolve(data.Item);
       });
     });
@@ -87,10 +88,10 @@ class Dynamola {
 
       this.docClient.query(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to read items. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('getAllItems... succeeded:', data);
+        Dynamola.customConsoleLog('getAllItems... succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -123,10 +124,52 @@ class Dynamola {
 
       this.docClient.query(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to read items. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('getItemsBySortKeyInRange() succeeded:', data);
+        Dynamola.customConsoleLog('getItemsBySortKeyInRange() succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
+
+ /**
+   * Busca utilizando un Índice Local Secundario (LSI) de la tabla.
+   * @param {*} partitionKeyValue Valor de la Clave de Partición, para la búsqueda.
+   * @param {*} lsiValue Valor del LSI, para la búsqueda.
+   * @param {string} lsiIndexName Nombre del índice LSI.
+   * @param {string} lsiAttributeName Nombre del atributo (perteneciente al LSI) por el cual
+   * realizar la consulta.
+   * @param {string} operator Operador utilizado en la consulta (=, <, >, <=, >=).
+   * @returns {Promise<Object>} promise con array de elementos.
+   */
+  getItemsByLSI(partitionKeyValue, lsiValue, lsiIndexName, lsiAttributeName, operator) {
+    return new Promise((resolve, reject) => {
+      const valirOperators = ['=', '<', '<=', '>', '>='];
+      if (!valirOperators.includes(operator)) {
+        return reject(new Error(`Invalid operator: ${operator}`));
+      }
+
+      const params = {
+        TableName: this.tableName,
+        IndexName: lsiIndexName,
+        KeyConditionExpression: `#partitionKey = :val_pk and #lsi ${operator} :val_lsi`,
+        ExpressionAttributeNames: {
+          '#partitionKey': this.partitionKeyName,
+          '#lsi': lsiAttributeName,
+        },
+        ExpressionAttributeValues: {
+          ':val_pk': partitionKeyValue,
+          ':val_lsi': lsiValue,
+        },
+      };
+
+      this.docClient.query(params, (err, data) => {
+        if (err) {
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        Dynamola.customConsoleLog('getItemsByLSI() succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -134,6 +177,9 @@ class Dynamola {
 
   /**
    * Devuelve todos los items cuyo valor de partition key está entre los 2 valores dados.
+   * ADVERTENCIA: Se recomienda que diseñes tus tablas DynamoDB para no tener que
+   * utilizar este método, ya que éste necesita usar internamente scan(),
+   * que es más costoso que Query().
    * @param {string} partitionKeyFrom Inicio del rango de la clave de partición.
    * @param {string} partitionKeyTo Fin del rango de la clave de partición.
    * @returns {Promise<Object>} promise con array de elementos.
@@ -154,10 +200,10 @@ class Dynamola {
 
       this.docClient.scan(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to read items. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('getItemsByPartitionKeyInRange() succeeded:', data);
+        Dynamola.customConsoleLog('getItemsByPartitionKeyInRange() succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -189,12 +235,12 @@ class Dynamola {
 
       this.docClient.put(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to insert:', err);
+          Dynamola.customConsoleError('Unable to insert:', err);
           return reject(err);
         }
         // The ReturnValues parameter is used by several DynamoDB operations;
         // however, PutItem (and put) does not recognize any values other than NONE or ALL_OLD.
-        this.customConsoleLog('Saved Data. ', data);
+        Dynamola.customConsoleLog('Saved Data. ', data);
         return resolve(params.Item); // devuelve input
       });
     });
@@ -241,12 +287,12 @@ class Dynamola {
 
       if (partitionKeyFound === false) {
         const err = `El objeto no tiene atributo llamado como la Clave Partición "${this.partitionKeyName}"`;
-        this.customConsoleError('Unable to insert:', err);
+        Dynamola.customConsoleError('Unable to insert:', err);
         return reject(err);
       }
       if (this.sortKeyName !== null && sortKeyFound === false) {
         const err = `El objeto no tiene atributo llamado como la Clave Ordenación "${this.sortKeyName}".`;
-        this.customConsoleError('Unable to insert:', err);
+        Dynamola.customConsoleError('Unable to insert:', err);
         return reject(err);
       }
 
@@ -254,12 +300,12 @@ class Dynamola {
 
       this.docClient.put(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to insert:', err);
+          Dynamola.customConsoleError('Unable to insert:', err);
           return reject(err);
         }
         // The ReturnValues parameter is used by several DynamoDB operations;
         // however, PutItem (and put) does not recognize any values other than NONE or ALL_OLD.
-        this.customConsoleLog('Saved Data. ', data);
+        Dynamola.customConsoleLog('Saved Data. ', data);
         return resolve(params.Item); // devuelve input
       });
     });
@@ -283,10 +329,10 @@ class Dynamola {
 
       this.docClient.delete(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to delete item. Error JSON: ', err);
+          Dynamola.customConsoleError('Unable to delete item. Error JSON: ', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('DeleteItem succeeded:', data);
+        Dynamola.customConsoleLog('DeleteItem succeeded:', data);
         return resolve(data.Attributes);
       });
     });
@@ -337,10 +383,10 @@ class Dynamola {
 
       this.docClient.update(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to update item. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to update item. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('UpdateItem succeeded:', data);
+        Dynamola.customConsoleLog('UpdateItem succeeded:', data);
         return resolve(data.Attributes);
       });
     });
@@ -382,10 +428,10 @@ class Dynamola {
 
       this.docClient.update(params, (err, data) => {
         if (err) {
-          this.customConsoleError('Unable to update item. Error JSON:', err);
+          Dynamola.customConsoleError('Unable to update item. Error JSON:', err);
           return reject(JSON.stringify(err, null, 2));
         }
-        this.customConsoleLog('UpdateItem succeeded:', data);
+        Dynamola.customConsoleLog('UpdateItem succeeded:', data);
         return resolve(data.Attributes);
       });
     });
@@ -427,25 +473,7 @@ class Dynamola {
    */
   static createTableBasic(tableName) {
     return new Promise((resolve, reject) => {
-      const params = {
-        AttributeDefinitions: [
-          {
-            AttributeName: 'Key',
-            AttributeType: 'S',
-          },
-        ],
-        KeySchema: [
-          {
-            AttributeName: 'Key',
-            KeyType: 'HASH',
-          },
-        ],
-        ProvisionedThroughput: {
-          ReadCapacityUnits: 5,
-          WriteCapacityUnits: 5,
-        },
-        TableName: tableName,
-      };
+      const params = ParamsBuilder.getParamsToCreateBasicTable(tableName);
 
       const dynamodb = new AWS.DynamoDB();
       dynamodb.createTable(params, (err, data) => {
@@ -467,33 +495,7 @@ class Dynamola {
    */
   static createTableBasicWithSortKey(tableName) {
     return new Promise((resolve, reject) => {
-      const params = {
-        AttributeDefinitions: [
-          {
-            AttributeName: 'Key',
-            AttributeType: 'S',
-          },
-          {
-            AttributeName: 'SortKey',
-            AttributeType: 'S',
-          },
-        ],
-        KeySchema: [
-          {
-            AttributeName: 'Key',
-            KeyType: 'HASH',
-          },
-          {
-            AttributeName: 'SortKey',
-            KeyType: 'RANGE',
-          },
-        ],
-        ProvisionedThroughput: {
-          ReadCapacityUnits: 5,
-          WriteCapacityUnits: 5,
-        },
-        TableName: tableName,
-      };
+      const params = ParamsBuilder.getParamsToCreateBasicTableWithSortKey(tableName);
 
       const dynamodb = new AWS.DynamoDB();
       dynamodb.createTable(params, (err, data) => {
@@ -505,12 +507,36 @@ class Dynamola {
     });
   }
 
-  customConsoleLog(msg, data) {
-    console.log(`${msg} ${JSON.stringify(data, null, 2)}`);
+  /**
+   * Crea una tabla dynamodb básica, con:
+   * - una clave de partición con nombre "Key" y tipo string.
+   * - una clave de ordenación con nombre "KeySort" y tipo string.
+   * - un atributo con nombre "Lsi", de tipo int.
+   * - un LSI (Índice Local Secundario) llamado "Lsi-index",
+   * que tiene como Clave de Partición y Ordenación a "Key" y "Lsi" respectivamente.
+   * - con capacidad aprovisionada de 5 lecturas y 5 escrituras.
+   * @param {string} tableName nombre de la tabla
+   */
+  static createTableBasicWithSortKeyAndLSI(tableName) {
+    return new Promise((resolve, reject) => {
+      const params = ParamsBuilder.getParamsToCreateBasicTableWithSortKeyAndLSI(tableName);
+
+      const dynamodb = new AWS.DynamoDB();
+      dynamodb.createTable(params, (err, data) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(data);
+      });
+    });
   }
 
-  customConsoleError(msg, err) {
-    console.error(`${msg} ${JSON.stringify(err, null, 2)}`);
+  static customConsoleLog(msg, data) {
+    console.log(`${msg} ${JSON.stringify(data, null, 2)}`); // eslint-disable-line no-console
+  }
+
+  static customConsoleError(msg, err) {
+    console.error(`${msg} ${JSON.stringify(err, null, 2)}`); // eslint-disable-line no-console
   }
 }
 

@@ -7,7 +7,7 @@
  */
 const AWS = require('aws-sdk');
 const assert = require('assert');
-const dynamola = require('../index');
+const Dynamola = require('../index');
 const a = require('./assets.js');
 const configurations = require('../config.json');
 
@@ -32,7 +32,7 @@ async function esperarActivacionTablaCreada(nombreTabla, parent) {
     parent.timeout(ms += 3000);
     await sleep(3000);
     let ret = await dynamodb.describeTable({ TableName: nombreTabla })
-                            .promise();
+      .promise();
     console.log('loop: ' + JSON.stringify(ret));
     status = ret.Table.TableStatus;
   } while (status == 'CREATING');
@@ -44,13 +44,13 @@ describe('Dynamola tests', function () {
   describe('Tabla con Clave Principal Simple (sin Clave Ordenación)', function () {
     // Creación tabla con Clave Principal Simple.
     before(async function () {
-      const result = await dynamola.createTableBasic(a.NOMBRETABLAPRUEBAS);
+      const result = await Dynamola.createTableBasic(a.NOMBRETABLAPRUEBAS);
 
       console.log('result: ' + JSON.stringify(result));
 
       assert.equal(result.TableDescription.TableName, a.NOMBRETABLAPRUEBAS);
 
-      if(result.TableDescription.TableStatus == ' ACTIVE') {
+      if (result.TableDescription.TableStatus == ' ACTIVE') {
         return;
       }
 
@@ -59,7 +59,7 @@ describe('Dynamola tests', function () {
     });
 
     it('Añadiendo item en la tabla', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await
         d.addItem(a.ITEM1.Key, {
           'otroAtributo': a.ITEM1.otroAtributo,
@@ -72,7 +72,7 @@ describe('Dynamola tests', function () {
 
 
     it('Obtener item de la tabla', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await d.getItem(a.ITEM1.Key);
 
       assert.equal(okOrKo.Key, a.ITEM1.Key);
@@ -81,7 +81,7 @@ describe('Dynamola tests', function () {
 
 
     it('Añadiendo desde Objeto item en la tabla', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       let okOrKo = await
         d.addItemFromObject(a.ITEM2);
 
@@ -96,10 +96,10 @@ describe('Dynamola tests', function () {
       assert.equal(okOrKo.Key, a.ITEM3.Key);
       assert.equal(okOrKo.otroAtributo, a.ITEM3.otroAtributo);
     });
-    
+
 
     it('Obtener items en un RANGO de clave de partición', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', 'SortKey');
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', 'SortKey');
       const okOrKo = await d.getItemsByPartitionKeyInRange('cama', 'gato');
 
       assert.equal(okOrKo.length, 2);
@@ -108,7 +108,7 @@ describe('Dynamola tests', function () {
 
     it('Actualizar item de la tabla, atributo SIN espacios', async () => {
       const nuevoValor = 'valor actualizado';
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await d.updateItem(a.ITEM1.Key, { otroAtributo: nuevoValor });
 
       assert.equal(okOrKo.otroAtributo, nuevoValor);
@@ -117,7 +117,7 @@ describe('Dynamola tests', function () {
 
     it('Incrementar contador atómico', async () => {
       const incremento = 10;
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await d.incrementCounter(a.ITEM1.Key, 'atributoNum', incremento);
 
       assert.equal(okOrKo.atributoNum, a.ITEM1.atributoNum + incremento);
@@ -127,7 +127,7 @@ describe('Dynamola tests', function () {
     /* El método update de DynamoDB no soporta espacios en los nombres de los atributos. */
 
     it('Borrar item de la tabla', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await d.deleteItem(a.ITEM1.Key);
 
       assert.equal(okOrKo.Key, a.ITEM1.Key);
@@ -153,13 +153,13 @@ describe('Dynamola tests', function () {
 
     // Crear tabla con Clave Principal Compuesta
     before(async function () {
-      const result = await dynamola.createTableBasicWithSortKey(a.NOMBRETABLAPRUEBASCOMPUESTA);
+      const result = await Dynamola.createTableBasicWithSortKey(a.NOMBRETABLAPRUEBASCOMPUESTA);
 
       console.log('result: ' + JSON.stringify(result));
 
       assert.equal(result.TableDescription.TableName, a.NOMBRETABLAPRUEBASCOMPUESTA);
 
-      if(result.TableDescription.TableStatus == ' ACTIVE') {
+      if (result.TableDescription.TableStatus == ' ACTIVE') {
         return;
       }
 
@@ -169,7 +169,7 @@ describe('Dynamola tests', function () {
 
 
     it('Añadiendo desde Objeto item en tabla con Clave Principal Compuesta', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', null);
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', null);
 
       let okOrKo = await d.addItemFromObject(a.SORTITEM1);
       console.log("add result: " + JSON.stringify(okOrKo));
@@ -190,10 +190,10 @@ describe('Dynamola tests', function () {
       console.log("add result: " + JSON.stringify(okOrKo));
       assert.equal(okOrKo.Key, a.SORTITEM4.Key);
     });
-    
+
 
     it('Para una Clave Partition, obtener all items de la tabla.', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
       const okOrKo = await d.getAllItemsByPartitionKey('user1');
 
       assert.equal(okOrKo.length, 3);
@@ -202,7 +202,7 @@ describe('Dynamola tests', function () {
 
 
     it('Para 1 Clave Partición, obtener items en un RANGO de Clave de Ordenación.', async () => {
-      let d = new dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
       const okOrKo = await d.getItemsBySortKeyInRange('user1', '1980', '1994');
 
       assert.equal(okOrKo.length, 2);
@@ -216,7 +216,7 @@ describe('Dynamola tests', function () {
       dynamodb.deleteTable({ TableName: a.NOMBRETABLAPRUEBASCOMPUESTA }, function (err, data) {
         if (err) {
           console.error(`Unable to delete table "${a.NOMBRETABLAPRUEBASCOMPUESTA}". Error JSON:`,
-                        JSON.stringify(err, null, 2));
+            JSON.stringify(err, null, 2));
         } else {
           console.log(`Deleted table "${a.NOMBRETABLAPRUEBASCOMPUESTA}"`);
         }
@@ -224,7 +224,94 @@ describe('Dynamola tests', function () {
         assert.equal(data.TableDescription.TableName, a.NOMBRETABLAPRUEBASCOMPUESTA);
       });
     });
-    
+
+  })
+
+
+  describe('Tabla con LSI', function () {
+
+    // Crear tabla con LSI
+    before(async function () {
+      const result = await Dynamola.createTableBasicWithSortKeyAndLSI(a.NOMBRETABLAPRUEBASLSI);
+
+      console.log('result: ' + JSON.stringify(result));
+
+      assert.equal(result.TableDescription.TableName, a.NOMBRETABLAPRUEBASLSI);
+
+      if (result.TableDescription.TableStatus == ' ACTIVE') {
+        return;
+      }
+
+      status = await esperarActivacionTablaCreada(a.NOMBRETABLAPRUEBASLSI, this);
+      console.log('Tabla activa');
+      assert.equal(status, 'ACTIVE');
+    });
+
+
+    it('Añadiendo desde Objeto item en tabla con LSI', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', null);
+
+      let okOrKo = await d.addItemFromObject(a.SORTITEM1);
+      okOrKo = await d.addItemFromObject(a.SORTITEM2);
+      okOrKo = await d.addItemFromObject(a.SORTITEM3);
+      okOrKo = await d.addItemFromObject(a.SORTITEM4);
+      console.log("add result: " + JSON.stringify(okOrKo));
+      assert.equal(okOrKo.Key, a.SORTITEM4.Key);
+    });
+
+
+    it('Para una Clave Partition, obtener all items de la tabla.', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
+      const okOrKo = await d.getAllItemsByPartitionKey('user1');
+
+      assert.equal(okOrKo.length, 3);
+      assert.equal(okOrKo[0].Key, 'user1');
+    });
+
+    it('getItemsByLSI(=5)', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
+      const okOrKo = await d.getItemsByLSI('user1', 5, 'Lsi-index', 'Lsi', '=');
+
+      assert.equal(okOrKo.length, 2);
+      assert.equal(okOrKo[0].Lsi, 5);
+      assert.equal(okOrKo[1].Lsi, 5);
+    });
+
+    it('getItemsByLSI(<5)', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
+      const okOrKo = await d.getItemsByLSI('user1', 5, 'Lsi-index', 'Lsi', '<');
+
+      assert.equal(okOrKo.length, 1);
+      assert.equal(okOrKo[0].Lsi < 5, true);
+    });
+
+    it('getItemsByLSI(operator "z") -> reject', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
+
+      await d.getItemsByLSI('user1', 5, 'Lsi-index', 'Lsi', 'z').then(
+        () => {
+          assert.equal(true, false); // fallar
+        },
+        (err) => {
+          assert.equal(err.message, 'Invalid operator: z');
+        }
+      );
+    });
+
+    after(function () {
+      const dynamodb = new AWS.DynamoDB();
+      dynamodb.deleteTable({ TableName: a.NOMBRETABLAPRUEBASLSI }, function (err, data) {
+        if (err) {
+          console.error(`Unable to delete table "${a.NOMBRETABLAPRUEBASLSI}". Error JSON:`,
+            JSON.stringify(err, null, 2));
+        } else {
+          console.log(`Deleted table "${a.NOMBRETABLAPRUEBASLSI}"`);
+        }
+
+        assert.equal(data.TableDescription.TableName, a.NOMBRETABLAPRUEBASLSI);
+      });
+    });
+
 
   })
 })

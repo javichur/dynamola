@@ -24,24 +24,29 @@ module.exports = {
         Key: 'user1',
         SortKey:'1990',
         otroAtributo: 'motor',
-        atributoNum: 3
+        atributoNum: 3,
+        Lsi: 5
     },
     SORTITEM2: {
         Key: 'user1',
         SortKey:'1995',
         otroAtributo: 'verde',
-        atributoNum: 5
+        atributoNum: 5,
+        Lsi: 5
     },
     SORTITEM3: {
         Key: 'user2',
         SortKey:'1995',
         otroAtributo: 'rojo',
-        atributoNum: 30
+        atributoNum: 30,
+        Lsi: 5
     },
     SORTITEM4: {
         Key: 'user1',
         SortKey:'1993',
         otroAtributo: 'amarillo',
-        atributoNum: 3
+        atributoNum: 3,
+        Lsi: 4
     },
+    NOMBRETABLAPRUEBASLSI: 'tablapruebaLSI',
 };

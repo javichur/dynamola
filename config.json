@@ -1,6 +1,6 @@
 {
     "local": {
-      "region": "ocal",
+      "region": "local",
       "endpoint": "http://localhost:8000",
       "profile": "fake-downloadable-version"
     },
