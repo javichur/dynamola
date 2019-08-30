@@ -105,13 +105,22 @@ describe('Dynamola tests', function () {
       assert.equal(okOrKo.length, 2);
     });
 
-
-    it('Actualizar item de la tabla, atributo SIN espacios', async () => {
+    it('Actualizar item de la tabla, 1 atributo SIN espacios', async () => {
       const nuevoValor = 'valor actualizado';
       let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
       const okOrKo = await d.updateItem(a.ITEM1.Key, { otroAtributo: nuevoValor });
 
       assert.equal(okOrKo.otroAtributo, nuevoValor);
+    });
+
+    it('Actualizar item de la tabla, DOS atributos', async () => {
+      const nuevoValor = 'valor actualizado de nuevo';
+      const nuevoValor2 = 40;
+      let d = new Dynamola(a.NOMBRETABLAPRUEBAS, 'Key', null);
+      const okOrKo = await d.updateItem(a.ITEM1.Key, { otroAtributo: nuevoValor, atributo4: nuevoValor2 });
+
+      assert.equal(okOrKo.otroAtributo, nuevoValor);
+      assert.equal(okOrKo.atributo4, nuevoValor2);
     });
 
 

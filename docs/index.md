@@ -57,7 +57,7 @@ Dynamola, the DynamoDB easy library for Lambda functions.
 
 **Meta**
 
--   **version**: 1.4.0
+-   **version**: 1.4.1
 -   **author**: Javier Campos (https&#x3A;//javiercampos.es).
 -   **license**: MIT
 

@@ -3,7 +3,8 @@ module.exports = {
     ITEM1: {
         Key: 'item1',
         otroAtributo: 'valor otro atributo',
-        atributoNum: 25
+        atributoNum: 25,
+        atributo4: 4
     },
     ITEM2: {
         Key: 'casa',

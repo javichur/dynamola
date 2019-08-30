@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.4.0
+ * @version 1.4.1
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
@@ -375,11 +375,11 @@ class Dynamola {
         const name = Object.keys(itemAttributesToChange)[i];
         // const nameNorm = `${name.replace(/\s/g, '_')}_value`; // no es suficiente
 
-        strUpdateExpression += ` ${name} = :${name}_value`;
+        strUpdateExpression += ` ${name} = :${name}_value,`;
         params.ExpressionAttributeValues[`:${name}_value`] = itemAttributesToChange[name];
       }
 
-      params.UpdateExpression = strUpdateExpression;
+      params.UpdateExpression = strUpdateExpression.slice(0, -1); // quitamos última coma.
 
       this.docClient.update(params, (err, data) => {
         if (err) {

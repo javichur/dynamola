@@ -72,6 +72,9 @@ Puedes probar en local descargando la herramienta "DynamoDB Local" (<https://doc
 
 ```bash
 java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
+
+En windows:
+java -D"java.library.path"=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 ```
 
 ## Conceptos
