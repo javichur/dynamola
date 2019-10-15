@@ -198,6 +198,10 @@ describe('Dynamola tests', function () {
       okOrKo = await d.addItemFromObject(a.SORTITEM4);
       console.log("add result: " + JSON.stringify(okOrKo));
       assert.equal(okOrKo.Key, a.SORTITEM4.Key);
+
+      okOrKo = await d.addItemFromObject(a.SORTITEM5);
+      console.log("add result: " + JSON.stringify(okOrKo));
+      assert.equal(okOrKo.Key, a.SORTITEM5.Key);
     });
 
 
@@ -205,7 +209,7 @@ describe('Dynamola tests', function () {
       let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
       const okOrKo = await d.getAllItemsByPartitionKey('user1');
 
-      assert.equal(okOrKo.length, 3);
+      assert.equal(okOrKo.length, 4);
       assert.equal(okOrKo[0].Key, 'user1');
     });
 
@@ -217,6 +221,16 @@ describe('Dynamola tests', function () {
       assert.equal(okOrKo.length, 2);
       assert.equal(okOrKo[0].Key, 'user1');
       assert.equal((okOrKo[0].SortKey >= '1980' && okOrKo[0].SortKey <= '1994'), true);
+    });
+
+    it('Para 1 Clave Partición, obtener items BEGINS WITH de Clave de Ordenación.', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
+      const okOrKo = await d.getItemsBySortKeyBeginsWith('user1', '199');
+
+      assert.equal(okOrKo.length, 3);
+      assert.equal(okOrKo[0].SortKey.startsWith('199'), true);
+      assert.equal(okOrKo[1].SortKey.startsWith('199'), true);
+      assert.equal(okOrKo[2].SortKey.startsWith('199'), true);
     });
 
 
@@ -320,7 +334,61 @@ describe('Dynamola tests', function () {
         assert.equal(data.TableDescription.TableName, a.NOMBRETABLAPRUEBASLSI);
       });
     });
+  })
+
+  describe('Tabla con GSI en SortKey', function () {
+
+    // Crear tabla con GSI
+    before(async function () {
+      const result = await Dynamola.createTableBasicWithSortKeyGSI(a.NOMBRETABLAPRUEBASGSI);
+
+      console.log('result: ' + JSON.stringify(result));
+
+      assert.equal(result.TableDescription.TableName, a.NOMBRETABLAPRUEBASGSI);
+
+      if (result.TableDescription.TableStatus == ' ACTIVE') {
+        return;
+      }
+
+      status = await esperarActivacionTablaCreada(a.NOMBRETABLAPRUEBASGSI, this);
+      console.log('Tabla activa');
+      assert.equal(status, 'ACTIVE');
+    });
 
 
+    it('Añadiendo desde Objeto item en tabla con GSI', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASGSI, 'Key', null);
+
+      let okOrKo = await d.addItemFromObject(a.SORTITEM1);
+      okOrKo = await d.addItemFromObject(a.SORTITEM2);
+      okOrKo = await d.addItemFromObject(a.SORTITEM3);
+      okOrKo = await d.addItemFromObject(a.SORTITEM4);
+      console.log("add result: " + JSON.stringify(okOrKo));
+      assert.equal(okOrKo.Key, a.SORTITEM4.Key);
+    });
+
+
+    it('getItemsByGSI(=1995)', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASGSI, 'Key', 'SortKey');
+      const okOrKo = await d.getItemsByGSI('1995', 'Gsi-index','SortKey');
+
+      assert.equal(okOrKo.length, 2);
+      assert.equal(okOrKo[0].SortKey, '1995');
+      assert.equal(okOrKo[1].SortKey, '1995');
+    });
+
+    after(function () {
+      const dynamodb = new AWS.DynamoDB();
+      dynamodb.deleteTable({ TableName: a.NOMBRETABLAPRUEBASGSI }, function (err, data) {
+        if (err) {
+          console.error(`Unable to delete table "${a.NOMBRETABLAPRUEBASGSI}". Error JSON:`,
+            JSON.stringify(err, null, 2));
+        } else {
+          console.log(`Deleted table "${a.NOMBRETABLAPRUEBASGSI}"`);
+        }
+
+        assert.equal(data.TableDescription.TableName, a.NOMBRETABLAPRUEBASGSI);
+      });
+    });
   })
 })

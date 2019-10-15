@@ -49,5 +49,13 @@ module.exports = {
         atributoNum: 3,
         Lsi: 4
     },
+    SORTITEM5: {
+        Key: 'user1',
+        SortKey:'1973',
+        otroAtributo: 'limón',
+        atributoNum: 33,
+        Lsi: 73
+    },
     NOMBRETABLAPRUEBASLSI: 'tablapruebaLSI',
+    NOMBRETABLAPRUEBASGSI: 'tablapruebaGSI',
 };

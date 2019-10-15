@@ -8,13 +8,14 @@ Documentación completa en <https://github.com/javichur/dynamola/blob/master/doc
 
 ## Dynamola incluye métodos sencillos para
 
-✓ **Buscar** elementos en una tabla DynamoDB (por Clave de Partición, por Clave de Ordenación, por Índice Local Secundario, por rango, etc...).
-✓ **Añadir** elementos en una tabla DynamoDB.
-✓ **Borrar** elementos de una tabla DynamoDB.
-✓ **Actualizar** un elemento de una tabla DynamoDB.
-✓ **Incrementar** el valor de un atributo de un elemento, de una tabla DynamoDB.
-✓ **Crear tablas sencillas**, con o sin Clave de Ordenación.
-✓ Crear tablas sencillas, con o sin Índice Local Secundario (LSI).
+- [x] **Buscar** elementos en una tabla DynamoDB (por Clave de Partición, por Clave de Ordenación, por Índice Local Secundario (LSI), Por Índice Global Secundario (GSI), por rango, por Clave de Ordenación que "empieza por", etc...).
+- [x] **Añadir** elementos en una tabla DynamoDB.
+- [x] **Borrar** elementos de una tabla DynamoDB.
+- [x] **Actualizar** un elemento de una tabla DynamoDB.
+- [x] **Incrementar** el valor de un atributo de un elemento, de una tabla DynamoDB.
+- [x] **Crear tablas sencillas**, con o sin Clave de Ordenación.
+- [x] Crear tablas sencillas, con o sin Índice Local Secundario (LSI).
+- [x] Crear tablas sencillas, con o sin Índice Global Secundario (GSI).
 
 ## Ejemplo de uso
 
@@ -84,8 +85,11 @@ java -D"java.library.path"=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb
 3. Clave Principal Simple (Simple Primary Key). Formada solo por Clave de Partición.
 4. Clave Principal Compuesta (Composite Primary Key). Formada por una Clave de Partición y una Clave de Ordenación.
 5. Índice Secundario Local (LSI). Un índice que tiene la misma Clave de Partición que la tabla base, pero una clave de ordenación diferente.
+6. Índice Secundario Global (GSI). Un índice con una clave de partición y opcionalmente una clave de ordenación que pueden diferir de las claves de la tabla base.
 
 ## Proyectos de ejemplo que usa Dynamola para leer y escribir en DynamoDB de AWS
+
+<https://github.com/javichur/alexa-skill-clean-code-template>
 
 <https://github.com/javichur/Alexa-Skill-Lavaplatos>
 

@@ -109,6 +109,54 @@ class ParamsBuilder {
       TableName: tableName,
     };
   }
+
+  static getParamsToCreateBasicTableWithSortKeyGSI(tableName) {
+    return {
+      AttributeDefinitions: [
+        {
+          AttributeName: 'Key',
+          AttributeType: 'S',
+        },
+        {
+          AttributeName: 'SortKey',
+          AttributeType: 'S',
+        },
+      ],
+      KeySchema: [
+        {
+          AttributeName: 'Key',
+          KeyType: 'HASH',
+        },
+        {
+          AttributeName: 'SortKey',
+          KeyType: 'RANGE',
+        },
+      ],
+      GlobalSecondaryIndexes: [
+        {
+          IndexName: 'Gsi-index',
+          KeySchema: [
+            {
+              AttributeName: 'SortKey',
+              KeyType: 'HASH',
+            },
+          ],
+          Projection: {
+            ProjectionType: 'KEYS_ONLY',
+          },
+          ProvisionedThroughput: { 
+            ReadCapacityUnits: 5,
+            WriteCapacityUnits: 5,
+         }
+        },
+      ],
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 5,
+        WriteCapacityUnits: 5,
+      },
+      TableName: tableName,
+    };
+  }
 }
 
 module.exports = ParamsBuilder;

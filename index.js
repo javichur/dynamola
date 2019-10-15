@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.4.1
+ * @version 1.4.2
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
@@ -133,6 +133,39 @@ class Dynamola {
     });
   }
 
+  /**
+   * En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
+   * el valor de Clave de Partición dado, cuya Clave Ordenación empieza por sortKeyValueBeginsWith.
+   * @param {string} partitionKeyValue
+   * @param {string} sortKeyValueBeginsWith
+   * @returns {Promise<Object>} promise con array de elementos.
+   */
+  getItemsBySortKeyBeginsWith(partitionKeyValue, sortKeyValueBeginsWith) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        KeyConditionExpression: '#partitionKey = :val and begins_with (#sortKey, :sortkeyval)',
+        ExpressionAttributeNames: {
+          '#partitionKey': this.partitionKeyName,
+          '#sortKey': this.sortKeyName,
+        },
+        ExpressionAttributeValues: {
+          ':val': partitionKeyValue,
+          ':sortkeyval': sortKeyValueBeginsWith,
+        },
+      };
+
+      this.docClient.query(params, (err, data) => {
+        if (err) {
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        Dynamola.customConsoleLog('getItemsBySortKeyBeginsWith() succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
+
  /**
    * Busca utilizando un Índice Local Secundario (LSI) de la tabla.
    * @param {*} partitionKeyValue Valor de la Clave de Partición, para la búsqueda.
@@ -170,6 +203,38 @@ class Dynamola {
           return reject(JSON.stringify(err, null, 2));
         }
         Dynamola.customConsoleLog('getItemsByLSI() succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
+
+  /**
+   * Busca utilizando un Índice Global Secundario (GSI) simple de la tabla.
+   * @param {string} gsiValue Valor a buscar en Partition Key
+   * @param {string} gsiIndexName Nombre del índice GSI.
+   * @param {string} gsiAttributeName Nombre del atributo Partition Key del GSI.
+   * @returns promise con array de elementos.
+   */
+  getItemsByGSI(gsiValue, gsiIndexName, gsiAttributeName) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        IndexName: gsiIndexName,
+        KeyConditionExpression: `#gsi = :val_gsi`,
+        ExpressionAttributeNames: {
+          '#gsi': gsiAttributeName,
+        },
+        ExpressionAttributeValues: {
+          ':val_gsi': gsiValue,
+        },
+      };
+
+      this.docClient.query(params, (err, data) => {
+        if (err) {
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        Dynamola.customConsoleLog('getItemsByGSI() succeeded:', data);
         return resolve(data.Items);
       });
     });
@@ -488,7 +553,7 @@ class Dynamola {
   /**
    * Crea una tabla dynamodb básica, con:
    * - una clave de partición con nombre "Key" y tipo string.
-   * - una clave de ordenación con nombre "KeySort" y tipo string.
+   * - una clave de ordenación con nombre "SortKey" y tipo string.
    * - con capacidad aprovisionada de 5 lecturas y 5 escrituras.
    * - sin índices secundarios.
    * @param {string} tableName nombre de la tabla
@@ -510,7 +575,7 @@ class Dynamola {
   /**
    * Crea una tabla dynamodb básica, con:
    * - una clave de partición con nombre "Key" y tipo string.
-   * - una clave de ordenación con nombre "KeySort" y tipo string.
+   * - una clave de ordenación con nombre "SortKey" y tipo string.
    * - un atributo con nombre "Lsi", de tipo int.
    * - un LSI (Índice Local Secundario) llamado "Lsi-index",
    * que tiene como Clave de Partición y Ordenación a "Key" y "Lsi" respectivamente.
@@ -520,6 +585,30 @@ class Dynamola {
   static createTableBasicWithSortKeyAndLSI(tableName) {
     return new Promise((resolve, reject) => {
       const params = ParamsBuilder.getParamsToCreateBasicTableWithSortKeyAndLSI(tableName);
+
+      const dynamodb = new AWS.DynamoDB();
+      dynamodb.createTable(params, (err, data) => {
+        if (err) {
+          return reject(err);
+        }
+        return resolve(data);
+      });
+    });
+  }
+
+  /**
+   * Crea una tabla dynamodb básica, con:
+   * - una clave de partición con nombre "Key" y tipo string.
+   * - una clave de ordenación con nombre "SortKey" y tipo string.
+   * - un GSI (Índice Global Secundario) simple llamado "Gsi-index",
+   * que tiene como Clave de Partición a "SortKey", pero que no tiene 
+   * una Clave de Ordenación.
+   * - con capacidad aprovisionada de 5 lecturas y 5 escrituras.
+   * @param {string} tableName nombre de la tabla
+   */
+  static createTableBasicWithSortKeyGSI(tableName) {
+    return new Promise((resolve, reject) => {
+      const params = ParamsBuilder.getParamsToCreateBasicTableWithSortKeyGSI(tableName);
 
       const dynamodb = new AWS.DynamoDB();
       dynamodb.createTable(params, (err, data) => {
