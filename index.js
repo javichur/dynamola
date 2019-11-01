@@ -3,7 +3,7 @@
  * @file Dynamola, the DynamoDB easy library for Lambda functions.
  * (https://github.com/javichur/dynamola)
  * @author Javier Campos (https://javiercampos.es).
- * @version 1.4.2
+ * @version 1.4.5
  * @license MIT
  * @param {string} tableName nombre de la tabla en DynamoDB.
  * @param {string} partitionKeyName nombre de la Clave de Partición de la tabla.
@@ -100,6 +100,13 @@ class Dynamola {
     });
   }
 
+  /**
+   * Devuelve el elemento con valor máximo en la clave de ordenación del índice secundario local.
+   *
+   * @param {string} partitionKeyValue valor de clave de partición.
+   * @param {string} lsiIndexName Nombre del índice secundario local.
+   * @returns elemento con valor máximo en clave de ordenación del índice secundario local.
+   */
   getItemGreatestByLSI(partitionKeyValue, lsiIndexName) {
     return new Promise((resolve, reject) => {
       const params = {
