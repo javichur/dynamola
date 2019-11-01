@@ -286,8 +286,9 @@ describe('Dynamola tests', function () {
       okOrKo = await d.addItemFromObject(a.SORTITEM2);
       okOrKo = await d.addItemFromObject(a.SORTITEM3);
       okOrKo = await d.addItemFromObject(a.SORTITEM4);
+      okOrKo = await d.addItemFromObject(a.SORTITEM5);
       console.log("add result: " + JSON.stringify(okOrKo));
-      assert.equal(okOrKo.Key, a.SORTITEM4.Key);
+      assert.equal(okOrKo.Key, a.SORTITEM5.Key);
     });
 
 
@@ -295,7 +296,7 @@ describe('Dynamola tests', function () {
       let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
       const okOrKo = await d.getAllItemsByPartitionKey('user1');
 
-      assert.equal(okOrKo.length, 3);
+      assert.equal(okOrKo.length, 4);
       assert.equal(okOrKo[0].Key, 'user1');
     });
 
@@ -327,6 +328,15 @@ describe('Dynamola tests', function () {
           assert.equal(err.message, 'Invalid operator: z');
         }
       );
+    });
+
+    it('getItemGreatestByLSI()', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASLSI, 'Key', 'SortKey');
+
+      const okOrKo = await d.getItemGreatestByLSI('user1', 'Lsi-index');
+
+      assert.equal(okOrKo.length, 1);
+      assert.equal(okOrKo[0].Lsi, 73);
     });
 
     after(function () {
@@ -371,8 +381,9 @@ describe('Dynamola tests', function () {
       okOrKo = await d.addItemFromObject(a.SORTITEM2);
       okOrKo = await d.addItemFromObject(a.SORTITEM3);
       okOrKo = await d.addItemFromObject(a.SORTITEM4);
+      okOrKo = await d.addItemFromObject(a.SORTITEM5);
       console.log("add result: " + JSON.stringify(okOrKo));
-      assert.equal(okOrKo.Key, a.SORTITEM4.Key);
+      assert.equal(okOrKo.Key, a.SORTITEM5.Key);
     });
 
 

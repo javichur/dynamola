@@ -100,6 +100,33 @@ class Dynamola {
     });
   }
 
+  getItemGreatestByLSI(partitionKeyValue, lsiIndexName) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        IndexName: lsiIndexName,
+        KeyConditionExpression: `#partitionKey = :val`,
+        ExpressionAttributeNames: {
+          '#partitionKey': this.partitionKeyName,
+        },
+        ExpressionAttributeValues: {
+          ':val': partitionKeyValue,
+        },
+        Limit: 1,
+        ScanIndexForward: false,
+      };
+
+      this.docClient.query(params, (err, data) => {
+        if (err) {
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        Dynamola.customConsoleLog('getItemGreatestByLSI() succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
+
   /**
    * En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
    * el valor de Clave de Partición dado.

@@ -1,6 +1,6 @@
 {
   "name": "dynamola",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "DynamoDB easy library for Lambda functions.",
   "main": "index.js",
   "scripts": {

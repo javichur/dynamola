@@ -9,6 +9,7 @@ Documentación completa en <https://github.com/javichur/dynamola/blob/master/doc
 ## Dynamola incluye métodos sencillos para
 
 - [x] **Buscar** elementos en una tabla DynamoDB (por Clave de Partición, por Clave de Ordenación, por Índice Local Secundario (LSI), Por Índice Global Secundario (GSI), por rango, por Clave de Ordenación que "empieza por", etc...).
+- [x] **Obtener valor máximo** de la Clave de Ordenación de una tabla o de un LSI.
 - [x] **Añadir** elementos en una tabla DynamoDB.
 - [x] **Borrar** elementos de una tabla DynamoDB.
 - [x] **Actualizar** un elemento de una tabla DynamoDB.
