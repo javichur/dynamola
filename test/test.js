@@ -233,6 +233,14 @@ describe('Dynamola tests', function () {
       assert.equal(okOrKo[2].SortKey.startsWith('199'), true);
     });
 
+    it('Obtener el item con valor máximo en SortKey', async () => {
+      let d = new Dynamola(a.NOMBRETABLAPRUEBASCOMPUESTA, 'Key', 'SortKey');
+      const okOrKo = await d.getItemGreatestWithPrimarySortKey('user1');
+
+      assert.equal(okOrKo.length, 1);
+      assert.equal(okOrKo[0].SortKey, '1995');
+    });
+
 
     after(function () {
       const dynamodb = new AWS.DynamoDB();

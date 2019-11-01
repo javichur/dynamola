@@ -66,6 +66,39 @@ class Dynamola {
     return this.getItemWithPrimarySortKey(partitionKeyValue, null);
   }
 
+  /**
+   * Devuelve el elemento con mayor valor en SortKey, y con el partitionKeyValue indicado.
+   *
+   * @param {string} partitionKeyValue
+   * @returns
+   */
+  getItemGreatestWithPrimarySortKey(partitionKeyValue) {
+    return new Promise((resolve, reject) => {
+      const params = {
+        TableName: this.tableName,
+        KeyConditionExpression: '#partitionKey = :val',
+        ExpressionAttributeNames: {
+          '#partitionKey': this.partitionKeyName,
+        },
+        ExpressionAttributeValues: {
+          ':val': partitionKeyValue,
+        },
+        Limit: 1,
+        ScanIndexForward: false,
+      };
+
+      //params.Key = this.createKey(partitionKeyValue, null);
+
+      this.docClient.query(params, (err, data) => {
+        if (err) {
+          Dynamola.customConsoleError('Unable to read items. Error JSON:', err);
+          return reject(JSON.stringify(err, null, 2));
+        }
+        Dynamola.customConsoleLog('getItemGreatestWithPrimarySortKey... succeeded:', data);
+        return resolve(data.Items);
+      });
+    });
+  }
 
   /**
    * En tablas con Clave Principal Compuesta (partición+ordenación), devuelve todos los items para
